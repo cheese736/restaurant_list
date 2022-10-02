@@ -19,5 +19,5 @@
 + [Node.js@14.16.0](https://nodejs.org/en/)
 + [Express@4.16.4](https://www.npmjs.com/package/express)
 + [Express-Handlebars@3.0.0](https://www.npmjs.com/package/express-handlebars)
-+ [Bootstrap@v5.2](https://getbootstrap.com/)
-+ [Font-awesome@6.2.0](https://fontawesome.com/)
++ [Bootstrap@v5.2.1](https://getbootstrap.com/)
++ [Font-awesome@5.8.1](https://fontawesome.com/)
