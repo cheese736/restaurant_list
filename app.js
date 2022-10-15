@@ -28,11 +28,37 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 
 // routes setting
+
+app.get('/restaurants/new', (req,res) => {
+  res.render('new')
+})
+
+app.post('/restaurants/new', (req,res) => {
+  const {
+    name, name_en, category, image, location,
+    phone, google_map, rating, description
+  } = req.body
+
+  Resto.create({
+    name: name,
+    name_en: name_en,
+    category: category,
+    image: image,
+    location: location,
+    phone: phone,
+    google_map: google_map,
+    rating: rating,
+    description: description
+  })
+  .then(() => res.redirect('/'))
+  .catch(error => console.log(error))
+})
+
 app.get('/', (req, res) => {
   Resto.find()
   .lean()
   .then(restaurants => res.render('index', {restaurants}))
-  .catch(err => console.log(err))
+  .catch(error => console.log(error))
 })
 
 app.get('/search', (req,res) => {
@@ -54,11 +80,12 @@ app.get('/restaurants/:id', (req, res) => {
   return Resto.findById(id)
   .lean()
   .then((restaurant) => res.render('show',{restaurant}))
-  .catch(err => console.log(err))
+  .catch(error => console.log(error))
 
 })
 
 // 餐廳編輯頁面路由
+
 app.get('/restaurants/:id/edit', (req, res) => {
   const id = req.params.id
   return Resto.findById(id)
@@ -88,35 +115,11 @@ app.post('/restaurants/:id/edit', (req, res) => {
     return restaurant.save()
   })
   .then(() => res.redirect(`/restaurants/${id}`))
-  .catch(err => console.log(err))
-})
-
-app.get('/new', (req,res) => {
-  res.render('new')
-})
-
-app.post('/new', (req,res) => {
-  const {
-    name, name_en, category, image, location,
-    phone, google_map, rating, description
-  } = req.body
-
-  Resto.create({
-    name: name,
-    name_en: name_en,
-    category: category,
-    image: image,
-    location: location,
-    phone: phone,
-    google_map: google_map,
-    rating: rating,
-    description: description
-  })
-  .then(() => res.redirect('/'))
   .catch(error => console.log(error))
 })
 
-app.post('/:id/delete', (req, res) => {
+
+app.post('/restaurants/:id/delete', (req, res) => {
   const id = req.params.id
   return Resto.findById(id)
     .then(restaurant => restaurant.remove())
