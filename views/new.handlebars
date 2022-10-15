@@ -1,0 +1,68 @@
+<form action="/restaurants/new" method="POST" class="p-5">
+
+  <div class="row mt-2">
+    <div class="col">
+      <label for="" class="form-label mb-0">中文店名<span class="text-danger">*</span></label>
+        <input type="text" class="form-control"  placeholder="輸入餐廳名稱"\
+        name="name" value="" required>
+    </div>
+    <div class="col">
+      <label for="" class="form-label mb-0">英文店名</label>
+        <input type="text" class="form-control"  placeholder="輸入餐廳名稱"\
+        name="name_en" value="">
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col">
+      <label for="" class="form-label mb-0">圖片位址</label>
+      <input type="text" class="form-control"  placeholder="貼上餐廳相關圖片網址"\
+        name="image" value="">
+    </div>    
+    <div class="col">
+      <label for="" class="form-label mb-0">店址</label>
+      <input type="text" class="form-control"  placeholder="輸入餐廳地址"\
+        name="location" value="">
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col">
+      <label for="" class="form-label mb-0">電話</label>
+      <input type="text" class="form-control"  placeholder="輸入餐廳電話"\
+      name="phone" value="">
+    </div>    
+    <div class="col ">
+      <label for="" class="form-label mb-0">google地圖網址</label>
+      <input type="text" class="form-control"  placeholder="貼上google地圖網址"\
+        name="google_map" value="">
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col ">
+      <label for="" class="form-label mb-0">評分</label>
+      <input type="text" class="form-control"  placeholder="輸入餐廳評分"\
+        name="rating" value="">
+    </div>
+    <div class="col">
+      <label for="" class="form-label mb-0">餐廳分類</label>
+      <input type="text" class="form-control"  placeholder="輸入餐廳類別"\
+        name="category" value="">
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col">
+      <label for="" class="form-label mb-0">描述</label>
+      <input type="text" class="form-control"  placeholder="輸入對餐廳的描述"\
+      name="description" value="">
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end m-3">
+    <button type="submit" class="mx-2">Create</button>
+    <a href="/">back</a>
+  </div>
+
+</form>
