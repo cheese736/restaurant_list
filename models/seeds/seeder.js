@@ -5,7 +5,6 @@ const Resto = require('../restaurant') // 載入 restaurant model
 
 db.once('open', () => {
   Resto.deleteMany({})
-  .then(() => console.log('clear data'))
   .then(() => {
     for (resto of restaurants.results) {
       Resto.create({

@@ -4,8 +4,9 @@ const Resto = require('../../models/restaurant')
 
 // 進入搜尋結果
 router.get('/', (req,res) => {
-  const keyword = req.query.keyword
+  const {keyword, sort, order} = req.query
   Resto.find()
+  .sort({[sort]: order})
   .lean()
   .then((restaurants) => {
     const filteredresult = restaurants.filter(restaurant => {
