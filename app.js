@@ -4,6 +4,7 @@ const app = express()
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const Resto = require('./models/restaurant') 
+const routes = require('./routes')
 const restaurant = require('./models/restaurant')
 const methodOverride = require('method-override')
 
@@ -30,110 +31,8 @@ app.use(express.urlencoded({ extended: true }))
 
 // routes setting
 
-// 進入餐廳新增頁面
-app.get('/restaurants/new', (req,res) => {
-  res.render('new')
-})
-
-// 新增一筆資料
-app.post('/restaurants/new', (req,res) => {
-  const {
-    name, name_en, category, image, location,
-    phone, google_map, rating, description
-  } = req.body
-
-  Resto.create({
-    name: name,
-    name_en: name_en,
-    category: category,
-    image: image,
-    location: location,
-    phone: phone,
-    google_map: google_map,
-    rating: rating,
-    description: description
-  })
-  .then(() => res.redirect('/'))
-  .catch(error => console.log(error))
-})
-
 // 進入首頁
-app.get('/', (req, res) => {
-  Resto.find()
-  .lean()
-  .then(restaurants => res.render('index', {restaurants}))
-  .catch(error => console.log(error))
-})
-
-// 進入搜尋結果
-app.get('/search', (req,res) => {
-  const keyword = req.query.keyword
-  Resto.find()
-  .lean()
-  .then((restaurants) => {
-    const filteredresult = restaurants.filter(restaurant => {
-      return restaurant.name.toLocaleLowerCase().includes(keyword.toLocaleLowerCase()) || 
-      restaurant.category.toLocaleLowerCase().includes(keyword.toLocaleLowerCase()) ||
-      restaurant.name_en.toLocaleLowerCase().includes(keyword.toLocaleLowerCase())
-    })
-      res.render('index', {restaurants : filteredresult, keyword: keyword})
-  })
-})
-
-// 刪除一筆資料
-app.delete('/restaurants/:id', (req, res) => {
-  const id = req.params.id
-  return Resto.findById(id)
-    .then(restaurant => restaurant.remove())
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
-
-// 進入餐廳詳細資料
-app.get('/restaurants/:id', (req, res) => {
-  const id = req.params.id
-  return Resto.findById(id)
-  .lean()
-  .then((restaurant) => res.render('show',{restaurant}))
-  .catch(error => console.log(error))
-
-})
-
-// 進入餐廳編輯頁面
-
-app.get('/restaurants/:id/edit', (req, res) => {
-  const id = req.params.id
-  return Resto.findById(id)
-    .lean()
-    .then((restaurant) => res.render('edit', {restaurant}))
-    .catch(error => console.log(error))
-})
-
-// 修改一筆資料
-app.put('/restaurants/:id', (req, res) => {
-  const id = req.params.id
-  const {
-    name, name_en, category, image, location,
-    phone, google_map, rating, description
-  } = req.body
-
-  Resto.findById(id)
-  .then(restaurant => {
-    restaurant.name = name
-    restaurant.name_en = name_en
-    restaurant.category = category
-    restaurant.image = image
-    restaurant.location = location
-    restaurant.phone = phone
-    restaurant.google_map = google_map
-    restaurant.rating = rating
-    restaurant.description = description
-    return restaurant.save()
-  })
-  .then(() => res.redirect(`/restaurants/${id}`))
-  .catch(error => console.log(error))
-})
-
+app.use(routes)
 
 
 // 設定 port 3000
