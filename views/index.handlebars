@@ -21,17 +21,18 @@
   <div class="search-bar-outer">
     <div class="search-bar-inner">
       <h4 class="mb-2">選擇排序方式</h4>
-      <div class="dropdown show">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="drorpdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown link
-        </a>
-
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
+        <div class="dropdown">
+          <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            點擊展開
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li><a class="dropdown-item" href="/search?keyword={{ keyword }}&sort=name&order=asc">A to Z</a></li>
+            <li><a class="dropdown-item" href="/search?keyword={{ keyword }}&sort=name&order=desc">Z to A</a></li>
+            <li><a class="dropdown-item" href="/search?keyword={{ keyword }}&sort=category&order=asc">類別</a></li>
+            <li><a class="dropdown-item" href="/search?keyword={{ keyword }}&sort=location&order=asc">地區</a></li>
+          </ul>
         </div>
-      </div>
     </div>
   </div>
 </div>
@@ -78,8 +79,6 @@
           </div>
         </div>
       </a>
-
-
     </div>
     {{/each}}
   </div>
