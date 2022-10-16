@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const Resto = require('./models/restaurant') 
 const restaurant = require('./models/restaurant')
+const methodOverride = require('method-override')
 
 mongoose.connect(process.env.MONGODB2_URI, {useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection
@@ -24,15 +25,17 @@ app.set('view engine', 'handlebars')
 
 // setting static files
 app.use(express.static('public'))
-
+app.use(methodOverride('_method'))
 app.use(express.urlencoded({ extended: true }))
 
 // routes setting
 
+// 進入餐廳新增頁面
 app.get('/restaurants/new', (req,res) => {
   res.render('new')
 })
 
+// 新增一筆資料
 app.post('/restaurants/new', (req,res) => {
   const {
     name, name_en, category, image, location,
@@ -54,6 +57,7 @@ app.post('/restaurants/new', (req,res) => {
   .catch(error => console.log(error))
 })
 
+// 進入首頁
 app.get('/', (req, res) => {
   Resto.find()
   .lean()
@@ -61,6 +65,7 @@ app.get('/', (req, res) => {
   .catch(error => console.log(error))
 })
 
+// 進入搜尋結果
 app.get('/search', (req,res) => {
   const keyword = req.query.keyword
   Resto.find()
@@ -75,6 +80,16 @@ app.get('/search', (req,res) => {
   })
 })
 
+// 刪除一筆資料
+app.delete('/restaurants/:id', (req, res) => {
+  const id = req.params.id
+  return Resto.findById(id)
+    .then(restaurant => restaurant.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
+
+// 進入餐廳詳細資料
 app.get('/restaurants/:id', (req, res) => {
   const id = req.params.id
   return Resto.findById(id)
@@ -84,7 +99,7 @@ app.get('/restaurants/:id', (req, res) => {
 
 })
 
-// 餐廳編輯頁面路由
+// 進入餐廳編輯頁面
 
 app.get('/restaurants/:id/edit', (req, res) => {
   const id = req.params.id
@@ -94,7 +109,8 @@ app.get('/restaurants/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/restaurants/:id/edit', (req, res) => {
+// 修改一筆資料
+app.put('/restaurants/:id', (req, res) => {
   const id = req.params.id
   const {
     name, name_en, category, image, location,
@@ -119,13 +135,6 @@ app.post('/restaurants/:id/edit', (req, res) => {
 })
 
 
-app.post('/restaurants/:id/delete', (req, res) => {
-  const id = req.params.id
-  return Resto.findById(id)
-    .then(restaurant => restaurant.remove())
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
 
 // 設定 port 3000
 app.listen(3000, () => {
