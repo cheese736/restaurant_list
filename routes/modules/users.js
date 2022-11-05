@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-// const passport = require('passport')
+const passport = require('passport')
 const User = require('../../models/user')
-// const bycrypt = require('bcryptjs')
+const bycrypt = require('bcryptjs')
 
 // GET登入頁
 router.get('/login', (req,res) => {
@@ -10,10 +10,10 @@ router.get('/login', (req,res) => {
 })
 
 // 提交登入資訊
-// router.post('/login', passport.authenticate('local', {
-//   successRedirect: '/',
-//   failureRedirect: '/users/login'
-// }))
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/users/login'
+}))
 
 //  GET 註冊頁
 router.get('/register', (req,res) => {
@@ -27,7 +27,7 @@ router.post('/register', (req,res) => {
   } = req.body
   const errors = []
 
-  if ( [name,email,password,confirmPassword].includes('')) {
+  if ( [email,password,confirmPassword].includes('')) {
     errors.push({message: '所有欄位都是必填。'})
   }
 
