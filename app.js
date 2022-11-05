@@ -1,5 +1,6 @@
 // require packages used in the project
 const express = require('express')
+const session = require('express-session')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 
@@ -11,6 +12,13 @@ const app = express()
 // setting template engine
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
+
+// 
+app.use(session({
+  secret: 'RandomString',
+  resave: false,
+  saveUninitialized: true
+}))
 
 // setting static files
 app.use(express.static('public'))
