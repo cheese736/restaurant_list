@@ -20,7 +20,7 @@ const SEED_USER = [
   }
 ]
 
-console.log(restaurants)
+// console.log(restaurants)
 db.once('open', () => {
   Promise.all(SEED_USER.map(user => {
     const { email, password, restaurantsId } = user
