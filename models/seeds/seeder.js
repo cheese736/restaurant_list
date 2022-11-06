@@ -11,43 +11,40 @@ const SEED_USER = [
   {
     email: 'user1@example.com',
     password: '12345678',
-    restaurantsId: [1,2,3]
+    restaurantsId: [1, 2, 3]
   },
   {
     email: 'user2@example.com',
     password: '12345678',
-    restaurantsId: [4,5,6]
+    restaurantsId: [4, 5, 6]
   }
 ]
 
 console.log(restaurants)
-db.once('open',() => {
+db.once('open', () => {
   Promise.all(SEED_USER.map(user => {
-    const {email, password, restaurantsId} = user
+    const { email, password, restaurantsId } = user
     // console.log(user)
     return bcrypt.genSalt(10)
-    .then(salt => bcrypt.hash(password,salt))
-    .then(hash => User.create({
-      email,
-      password: hash
-    }))
-    .then(user => {
+      .then(salt => bcrypt.hash(password, salt))
+      .then(hash => User.create({
+        email,
+        password: hash
+      }))
+      .then(user => {
       // console.log(user)
-      const userId = user._id
-      const fliteredRestaurant = restaurants.filter(resto => restaurantsId.includes(resto.id))
-      fliteredRestaurant.forEach(resto => resto.userId = userId)
-      return Resto.create(fliteredRestaurant)
-    })
-    .catch(err => console.log(err))
+        const userId = user._id
+        const fliteredRestaurant = restaurants.filter(resto => restaurantsId.includes(resto.id))
+        fliteredRestaurant.forEach(resto => resto.userId = userId)
+        return Resto.create(fliteredRestaurant)
+      })
+      .catch(err => console.log(err))
   }))
-  .then(() => {
-    console.log('seeds created successfully')
-    process.exit()
-  })
+    .then(() => {
+      console.log('seeds created successfully')
+      process.exit()
+    })
 })
-
-
-
 
 // 用 for 迴圈失敗
 // db.once('open', () => {

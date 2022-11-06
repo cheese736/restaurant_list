@@ -2,15 +2,15 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const userSchema = new Schema({
   name: {
-    type: String, // 資料型別是字串
+    type: String // 資料型別是字串
   },
   email: {
     type: String,
     require: true
   },
   password: {
-     type: String,
-     require: true,
+    type: String,
+    require: true
   },
   createdAt: {
     type: Date,
