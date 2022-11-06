@@ -12,7 +12,8 @@ router.get('/login', (req,res) => {
 // 提交登入資訊
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: '/users/login'
+  failureRedirect: '/users/login',
+  failureFlash: true
 }))
 
 //  GET 註冊頁
@@ -28,11 +29,11 @@ router.post('/register', (req,res) => {
   const errors = []
 
   if ( [email,password,confirmPassword].includes('')) {
-    errors.push({message: '所有欄位都是必填。'})
+    errors.push({message: 'email & password are necessary。'})
   }
 
   if (password !== confirmPassword) {
-    errors.push({message: '密碼與確認密碼不相符'})
+    errors.push({message: 'inconsistent password'})
   }
 
   if (errors.length) {
@@ -49,9 +50,8 @@ router.post('/register', (req,res) => {
   User.findOne({email})
   .then(user => {
     if (user) {
-      errors.push({message: '此email已註冊'})
+      errors.push({message: 'email has been used'})
       // 檢查email是否已註冊，若是，回到填寫頁面，保持輸入資訊
-      console.log('Operation failed: email has been used.')
       return res.render('register', {
         errors,
         name,
@@ -79,7 +79,7 @@ router.post('/register', (req,res) => {
 
 router.get('/logout', (req, res) => {
   req.logout()
-  req.flash('success_msg', '你已經成功登出')
+  req.flash('success_msg', 'Logout successfully')
   res.redirect('/users/login')
 })
 

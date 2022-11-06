@@ -10,18 +10,21 @@ module.exports = app => {
   app.use(passport.session())
 
   // 設定本地登入策略
-  passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done) => {
+  passport.use(new LocalStrategy({usernameField: 'email', passReqToCallback: true}, (req, email, password, done) => {
     User.findOne({email})
       .then(user => {
-        if (!user) return done(null, false, {message: 'Invalid email '})
+        if (!user) {
+          return done(null, false, req.flash('warning_msg', 'user not found'))
+        }
         return bcrypt.compare(password, user.password)
           .then(isMatch => { 
-            if (!isMatch) return done(null, false, {message: 'Incorrect email or password'})
+            if (!isMatch) return done(null, false, req.flash('warning_msg', 'incorrect email or password！'))
             return done(null, user)
          })
          .catch(err => done(err))
       })
       .catch(err => done(err))
+    }))
 
   // facebook 登入策略
   passport.use(new FacebookStrategy({
@@ -61,6 +64,4 @@ module.exports = app => {
         .then(user => done(null, user))
         .catch(err => done(err, null))
     })
-  }))
 }
-
