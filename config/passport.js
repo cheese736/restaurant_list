@@ -1,8 +1,8 @@
 const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy
+const LocalStrategy = require('passport-local')
 const FacebookStrategy = require('passport-facebook')
+const bcrypt = require('bcryptjs')
 const User = require('../models/user')
-const bycrypt = require('bcryptjs')
 
 module.exports = app => {
   // 初始化
@@ -13,15 +13,15 @@ module.exports = app => {
   passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done) => {
     User.findOne({email})
       .then(user => {
-        if (!user) {
-          return done(null, false, {message: 'Invalid email '})
-        }
-        return bycrypt.compare(password, user.password).then(isMatch => { 
-          if (!isMatch) { return done(null, false, {message: 'Incorrect email or password'}) }
-          return done(null, user)
-         }) 
+        if (!user) return done(null, false, {message: 'Invalid email '})
+        return bcrypt.compare(password, user.password)
+          .then(isMatch => { 
+            if (!isMatch) return done(null, false, {message: 'Incorrect email or password'})
+            return done(null, user)
+         })
+         .catch(err => done(err))
       })
-      .catch(err => done(err, false))
+      .catch(err => done(err))
 
   // facebook 登入策略
   passport.use(new FacebookStrategy({
@@ -29,22 +29,20 @@ module.exports = app => {
     clientSecret: process.env.FACEBOOK_SECRET,
     callbackURL: process.env.FACEBOOK_CALLBACK,
     profileFields: ['email', 'displayName']
-    },
+  },
     (accessToken, refreshToken, profile, done) => {
     const {name, email} = profile._json
     User.findOne({ email })
       .then(user => {
       if (user) return done(null, user)
-      
       const randomPassword = Math.random().toString(36).slice(-8)
-
-      bycrypt.genSalt(10)
-      .then(salt => bycrypt.hash(randomPassword,salt))
+      return bcrypt.genSalt(10)
+      .then(salt => bcrypt.hash(randomPassword,salt))
       .then(hash => {
       User.create({
         name,
         email,
-        password: hash
+        password: randomPassword
         })
       })
       .then(user => done(null, user))
@@ -65,3 +63,4 @@ module.exports = app => {
     })
   }))
 }
+
