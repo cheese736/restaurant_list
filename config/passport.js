@@ -45,7 +45,7 @@ module.exports = app => {
       User.create({
         name,
         email,
-        password: randomPassword
+        password: hash
         })
       })
       .then(user => done(null, user))
