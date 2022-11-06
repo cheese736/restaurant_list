@@ -7,7 +7,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "seed": "node ./models/seeds/seeder.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "standard && node my-tests.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "mongoose": "^5.9.7",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "standard": "*"
   }
 }
